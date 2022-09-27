@@ -36,9 +36,9 @@
                         <div class="mb-10">
                             <label for="import" class="required form-label">Example</label>
                             <input type="file" class="form-control form-control-solid" id="import" name="import"/>
+                            <label for="#" class="mt-1 required form-label">Download template,<a href="/template">click here</a></label>
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Import Data</button>

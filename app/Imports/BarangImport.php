@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\Barang;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class BarangImport implements ToModel
+class BarangImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -14,10 +15,9 @@ class BarangImport implements ToModel
     */
     public function model(array $row)
     {
-        return new Barang([
-            //
-            'name' => $row[1],
-            'jumlah' => $row[2]
+        return new Barang([       
+            'name' => $row['nama_barang'],
+            'jumlah' => $row['jumlah']
         ]);
     }
 }

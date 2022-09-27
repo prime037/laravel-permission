@@ -30,6 +30,8 @@ Route::get('/admin', function () {
 Route::get('/getBarang', [BarangController::class, 'index'])->name('getBarang');
 Route::get('/exportExcel', [BarangController::class, 'exportExcel'])->name('exportExcel');
 Route::post('/importExcel', [BarangController::class, 'importExcel'])->name('importExcel');
+Route::get('/template', [BarangController::class, 'template'])->name('template');
+
 
 
 

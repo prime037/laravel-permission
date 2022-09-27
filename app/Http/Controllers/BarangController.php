@@ -35,12 +35,12 @@ class BarangController extends Controller
     }
     //import excel
     public function importExcel(Request $request){
-        // $import = $request->file('import');
-        // $filename = $import->getClientOriginalName();
-        // $import->move('import', $filename);
-        // $path = public_path(`/import/`.$filename);
         Excel::import(new BarangImport, $request->file('import'));
         return back();
+    }
+    public function template(){
+        $path = storage_path()."/excel_template/template_barang.xlsx";
+        return response()->download($path);
     }
     /**
      * Show the form for creating a new resource.
