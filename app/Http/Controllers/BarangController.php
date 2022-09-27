@@ -9,6 +9,7 @@ use App\Exports\BarangExport;
 use App\Imports\BarangImport;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 class BarangController extends Controller
 {
@@ -24,7 +25,8 @@ class BarangController extends Controller
             $dataBarang = Barang::select([
                 DB::raw('@rownum  := @rownum  + 1 AS rownum'),
                 'name',
-                'jumlah'
+                'jumlah',
+                'id'
             ]);
             return Datatables::of($dataBarang)->make(true);
         }
@@ -61,6 +63,19 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         //
+        $validated = $request;
+        $validated = Validator::make($request->all(),[
+            'name' => 'required|min:4',
+            'jumlah' => 'required'
+        ]);
+        if ($validated->fails()) {
+            return  response()->json(['status'=>false,'data'=>$this->validationErrorsToString($validated->errors())]);
+        } 
+        
+        return Barang::create([
+            'name' => $request->name,
+            'jumlah' => $request->jumlah
+        ]);
     }
 
     /**
@@ -69,9 +84,11 @@ class BarangController extends Controller
      * @param  \App\Models\Barang  $barang
      * @return \Illuminate\Http\Response
      */
-    public function show(Barang $barang)
+    public function show(Barang $barang,Request $request)
     {
         //
+        $data = Barang::findOrFail($request->id);
+        return response()->json(['data' => $data]);
     }
 
     /**
@@ -95,6 +112,20 @@ class BarangController extends Controller
     public function update(Request $request, Barang $barang)
     {
         //
+        $edit_barang = Barang::findOrFail($request->id);
+        $validated = $request;
+        $validated = Validator::make($request->all(),[
+            'edit_name' => 'required|min:4',
+            'edit_jumlah' => 'required'
+        ]);
+        if ($validated->fails()) {
+            return  response()->json(['status'=>false,'data'=>$this->validationErrorsToString($validated->errors())]);
+        } 
+        
+        return $edit_barang->update([
+            'name' => $request->edit_name,
+            'jumlah' => $request->edit_jumlah
+        ]);
     }
 
     /**
@@ -103,8 +134,10 @@ class BarangController extends Controller
      * @param  \App\Models\Barang  $barang
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Barang $barang)
+    public function destroy(Barang $barang, Request $request)
     {
         //
+        $barang = Barang::findOrFail($request->id);
+        $barang->delete();
     }
 }

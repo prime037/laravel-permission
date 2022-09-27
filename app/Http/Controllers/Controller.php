@@ -10,4 +10,15 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    protected function validationErrorsToString($errArray) {
+        $valArr = array();
+        foreach ($errArray->toArray() as $key => $value) { 
+            $errStr = $key.', '.$value[0];
+            array_push($valArr, $errStr);
+        }
+        if(!empty($valArr)){
+            $errStrFinal = implode('<br/> ', $valArr);
+        }
+        return $errStrFinal;
+    }
 }
