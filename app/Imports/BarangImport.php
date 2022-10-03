@@ -3,10 +3,13 @@
 namespace App\Imports;
 
 use App\Models\Barang;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-
-class BarangImport implements ToModel, WithHeadingRow
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
+class BarangImport implements ToModel, WithHeadingRow,WithCalculatedFormulas,WithChunkReading,ShouldQueue
 {
     /**
     * @param array $row
@@ -19,5 +22,9 @@ class BarangImport implements ToModel, WithHeadingRow
             'name' => $row['nama_barang'],
             'jumlah' => $row['jumlah']
         ]);
+    }
+    public function chunkSize(): int
+    {
+        return 10;
     }
 }

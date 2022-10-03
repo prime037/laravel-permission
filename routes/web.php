@@ -36,7 +36,12 @@ Route::get('/getBarang', [BarangController::class, 'index'])->name('getBarang');
 Route::post('/show_edit_barang', [BarangController::class, 'show'])->name('showEditBarang');
 Route::post('/update_barang', [BarangController::class, 'update'])->name('update_barang');
 Route::post('/create_barang', [BarangController::class, 'store'])->name('create_barang');
-Route::post('/delete_barang', [BarangController::class, 'destroy'])->name('delete_barang');
+Route::post('/delete_barang', [BarangController::class, 'destroy'])->name('delete_barang')->middleware('role:admin');
+
+Route::get('/show_restore_barang', [BarangController::class, 'show_restore'])->name('show_restore_barang');
+Route::get('/restore_barang/{id}', [BarangController::class, 'restore'])->name('restore_barang');
+
+
 
 
 

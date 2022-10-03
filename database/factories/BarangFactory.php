@@ -20,7 +20,6 @@ class BarangFactory extends Factory
             //
             'name' => fake()->word(),
             'jumlah' => rand(1,100),
-            
         ];
     }
 }

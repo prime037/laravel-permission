@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BarangStored;
 use DataTables;
 use App\Models\Barang;
 use Illuminate\Http\Request;
 use App\Exports\BarangExport;
 use App\Imports\BarangImport;
+use App\Jobs\SendEmailToUserWithJob;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -28,8 +30,18 @@ class BarangController extends Controller
                 'jumlah',
                 'id'
             ]);
-            return Datatables::of($dataBarang)->make(true);
         }
+        return Datatables::of($dataBarang)->make(true);
+    }
+    //restore barang
+    public function show_restore(){
+        $restore = Barang::onlyTrashed()->get();
+        return view('content.restore_barang',['data' => $restore]);
+    }
+    public function restore($id){
+        $restore = Barang::onlyTrashed()->where('id',$id);
+    	$restore->restore();
+    	return redirect('/home')->with('restore','restore');
     }
     //export excel
     public function exportExcel(){
@@ -37,7 +49,7 @@ class BarangController extends Controller
     }
     //import excel
     public function importExcel(Request $request){
-        Excel::import(new BarangImport, $request->file('import'));
+        Excel::queueImport(new BarangImport, $request->file('import'));
         return back();
     }
     public function template(){
@@ -71,7 +83,12 @@ class BarangController extends Controller
         if ($validated->fails()) {
             return  response()->json(['status'=>false,'data'=>$this->validationErrorsToString($validated->errors())]);
         } 
-        
+        $queue = [
+            'name' => $request->name,
+            'jumlah'  => $request->jumlah
+        ];
+        // event(new BarangStored($queue));
+        // SendEmailToUserWithJob::dispatch($queue);
         return Barang::create([
             'name' => $request->name,
             'jumlah' => $request->jumlah
