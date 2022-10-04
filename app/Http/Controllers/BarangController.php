@@ -76,12 +76,14 @@ class BarangController extends Controller
     {
         //
         $validated = $request;
+        
         $validated = Validator::make($request->all(),[
             'name' => 'required|min:4',
-            'jumlah' => 'required'
+            'jumlah' => 'required',
+            'g-recaptcha-response' => 'required|captcha'
         ]);
         if ($validated->fails()) {
-            return  response()->json(['status'=>false,'data'=>$this->validationErrorsToString($validated->errors())]);
+            return  response()->json(['status'=>false,'data'=>$this->validationErrorsToString($validated->errors())]);;
         } 
         $queue = [
             'name' => $request->name,

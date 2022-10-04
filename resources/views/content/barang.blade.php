@@ -76,6 +76,13 @@
                             <label for="import" class="required form-label">Jumlah Barang</label>
                             <input type="number" class="form-control form-control-solid" id="jumlah" name="jumlah"/>
                         </div>
+
+                        <div class="text-center mt-5">
+                            {{-- {!! htmlFormSnippet() !!} --}}
+                            {!! NoCaptcha::renderJs() !!}
+                            <div class="g-recaptcha d-inline-block" data-sitekey="6LfF0yAiAAAAANS3rH90T2bFqFIk8XKJvOPvVcIo"></div>
+                        </div>
+            
                     </div>
                     
 
@@ -135,6 +142,9 @@
             </div>
         </div>
     </div>
+@endsection
+@section('style')
+    {{-- {!! htmlScriptTagJsApi() !!} --}}
 @endsection
 @section('scripts')
     {{-- script datatables --}}
@@ -317,7 +327,8 @@
                                 data:{
                                     name: name,
                                     jumlah: jumlah,
-                                    _token: _token
+                                    _token: _token,
+                                    "g-recaptcha-response": grecaptcha.getResponse()
                                 },
                                 success:function(response){
                                     if(response.status === false) {
