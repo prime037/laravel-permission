@@ -351,6 +351,7 @@
                                                 confirmButton: "btn btn-primary"
                                             }
                                         });
+                                        grecaptcha.reset();
                                         $('#showCreateModal').modal('hide');
                                         $("#createform")[0].reset();
                                         $("#barang").DataTable().ajax.reload();

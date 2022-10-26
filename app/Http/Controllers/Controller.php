@@ -17,7 +17,7 @@ class Controller extends BaseController
             array_push($valArr, $errStr);
         }
         if(!empty($valArr)){
-            $errStrFinal = implode('<br/> ', $valArr);
+            $errStrFinal = implode('<br/>', $valArr);
         }
         return $errStrFinal;
     }

@@ -12,6 +12,7 @@ use App\Jobs\SendEmailToUserWithJob;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
+use Elegant\Sanitizer\Sanitizer;
 
 class BarangController extends Controller
 {
@@ -76,7 +77,6 @@ class BarangController extends Controller
     {
         //
         $validated = $request;
-        
         $validated = Validator::make($request->all(),[
             'name' => 'required|min:4',
             'jumlah' => 'required',
@@ -85,15 +85,24 @@ class BarangController extends Controller
         if ($validated->fails()) {
             return  response()->json(['status'=>false,'data'=>$this->validationErrorsToString($validated->errors())]);;
         } 
-        $queue = [
-            'name' => $request->name,
-            'jumlah'  => $request->jumlah
+        $data = [
+            "name" => $request->name,
+            "jumlah" => $request->jumlah
         ];
+        $filters = [
+            'name' => 'trim|empty_string_to_null|capitalize|escape',
+            'jumlah' => 'trim|empty_string_to_null|escape',
+        ];
+        $newData = \Sanitizer::make($data, $filters)->sanitize();
+        // $queue = [
+        //     'name' => $request->name,
+        //     'jumlah'  => $request->jumlah
+        // ];
         // event(new BarangStored($queue));
         // SendEmailToUserWithJob::dispatch($queue);
         return Barang::create([
-            'name' => $request->name,
-            'jumlah' => $request->jumlah
+            'name' => $newData['name'],
+            'jumlah' => $newData['jumlah']
         ]);
     }
 
