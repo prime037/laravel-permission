@@ -181,6 +181,7 @@
                             "targets": -1,
                             "render": function ( data, type, row ) {
                                 return `
+                                    @role('admin|editor')
                                     <a onclick="showModalEdit(` + row['id'] + `)" id="` + row['id'] +`" type="button" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                                         <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
                                         <span class="svg-icon svg-icon-3">
@@ -191,6 +192,7 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                     </a>
+                                    @endrole
                                     @role('admin')
                                         <button type="button"  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm" onclick="hapus(`+ row['id'] +`)">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
