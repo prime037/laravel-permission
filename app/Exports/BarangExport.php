@@ -13,7 +13,15 @@ class BarangExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return Barang::all();
+        // $test = collect([["test","test","test"],["test",'test',"test"]]);
+        $items = Barang::all();
+        $test = [];
+        $i = 0;
+        foreach($items as $item ){
+            $i++;
+            $test[] = [$i,$item["name"],$item["jumlah"]];
+        };
+        return collect($test);
     }
     public function headings(): array
     {
