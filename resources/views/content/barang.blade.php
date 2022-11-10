@@ -361,6 +361,16 @@
                                 }
                             })
                         }, 200);
+                    }else{
+                        Swal.fire({
+                            text: "Check data!",
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
                     }
                 });
             }else{
